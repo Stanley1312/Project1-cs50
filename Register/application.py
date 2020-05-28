@@ -62,18 +62,29 @@ def searching():
     search = request.form.get("search")
     print(selection)
     print(search)
+    message = True
     if selection == "Users":
         result = Blog.query.filter_by(Author=search).all()
+        if result == []:
+            message = False
     elif selection == "Rating":
         result = Blog.query.filter_by(ratings_count=search).all()
+        if result == []:
+            message = False
     elif selection == "Title":
         result = Blog.query.filter_by(title=search).all()
+        if result == []:
+            message = False
     elif selection == "Date":
         result = Blog.query.filter_by(date=search).all()
+        if result == []:
+            message = False
     # else:
         #rendertemplate with alert
+    print(message)
     print(result)
-    return render_template('AboutUs.html')
+    full_filename = os.path.join(app.config['UPLOAD_FOLDER'],'first.jpg')
+    return render_template("home.html",user_image=full_filename,message=message)
 # @app.route("/users/<int:id>")
 # def user(id):
 #     """List all blog of an user."""

@@ -31,7 +31,7 @@
                 left: 63%;
             }
         </style>
-    </head>
+        
     <body>
         <div id="topnav">
             <a class="homebut" href="home.html">Home</a>
@@ -62,6 +62,14 @@
             <h2>The Work Space For All AI Engineers</h2>
             <div class="login"> 
             </div>
+        </div>
+        <div class="aleart">
+            <script>
+                function showAlert() { alert('không có dữ liệu !!'); }
+            </script>
+            {% if message == False %}
+                <script>showAlert();</script>
+            {% endif %}
         </div>
         <!-- <p> My Name is Tran Hoang Dang Khoa, 
         <br>I was born in Da nang city, I'm 22 years
