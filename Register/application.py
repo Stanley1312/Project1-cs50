@@ -76,7 +76,7 @@ def searching():
         message = False
 
     # print(message)
-    print(results[0].title)
+    print(results[0].Author)
 
     # full_filename = os.path.join(app.config['UPLOAD_FOLDER'],'click.jpg')
     # print(full_filename)
