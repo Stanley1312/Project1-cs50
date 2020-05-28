@@ -10,18 +10,26 @@
         
         <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous"> -->
         <style>
-            #topnav form {
+            .logout {
                 padding: 10px;
                 position:absolute;
                 left: 90%;
                 color: white;
-                background-color: black;
+                /* background-color: black; */
+                /* overflow: hidden; */
             }
-            #topnav input {
-                /* padding: 10px; */
-                position:absolute;
-                left: 60%;
+            .search {
+                padding: 10px;
+                position: relative;
+                left: 5%;
             }   
+            .search button {
+                padding: 10px;
+            }
+            .selection {
+                position: absolute;
+                left: 63%;
+            }
         </style>
     </head>
     <body>
@@ -30,22 +38,21 @@
             <a href="AboutUs.html">About Us</a>
             <a href="Memory.html">Memory with Clicker</a>
             <a href="Something.html">Something To Say</a>
-            <form action="{{ url_for('logout')}}">
+            <form class="logout" action="{{ url_for('logout')}}">
                 <button> Logout </button>
             </form>
-            
-            <form action="{{url_for('searching')}}" method="POST">
+            <form class="selection" action="{{url_for('searching')}}" method="POST">
                 <label for="selection"></label>
                 <select name="selection" id="selection">
-                  <option value="Users">Users</option>
-                  <option value="Rating">Rating</option>
-                  <option value="Title">Title</option>
-                  <option value="Date">Date</option>
+                    <option value="Users">Users</option>
+                    <option value="Rating">Rating</option>
+                    <option value="Title">Title</option>
+                    <option value="Date">Date</option>
                 </select>
                 <input class="search"type="search" name="search">
                 <button class="search">Search</button>
-            </form>
-        </div>        
+            </form>    
+        </div>     
         <div id="Saying">
                 Do You Remember Us ?     
         </div> 
@@ -56,8 +63,6 @@
             <div class="login"> 
             </div>
         </div>
-        
-        
         <!-- <p> My Name is Tran Hoang Dang Khoa, 
         <br>I was born in Da nang city, I'm 22 years
         <br>old

@@ -6,7 +6,7 @@ PEOPLE_FOLDER = os.path.join('static', 'img')
 
 app = Flask(__name__)
 # app.config["SQLALCHEMY_DATABASE_URI"] = r"postgres://axqhwdjtsatnmu:c065bdb14ba98663691563b16cae817e296f291494aaa56f926eadbb27a2ca22@ec2-34-200-72-77.compute-1.amazonaws.com:5432/d5i2dpm07892ig"
-app.config["SQLALCHEMY_DATABASE_URI"] = r"postgresql://postgres:1@localhost:5432/guru99"
+app.config["SQLALCHEMY_DATABASE_URI"] = r"postgresql://postgres:1@localhost:5432/project1"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config['UPLOAD_FOLDER'] = PEOPLE_FOLDER
 db.init_app(app)
@@ -60,7 +60,8 @@ def logout():
 def searching():
     selection = request.form.get("selection")
     search = request.form.get("search")
-    print(request.form)
+    # print(request.form)
+    # if Blog.query.filter_by()
     # print(search)
     return render_template('AboutUs.html')
 # @app.route("/users/<int:id>")
