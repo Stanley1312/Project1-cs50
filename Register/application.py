@@ -60,9 +60,19 @@ def logout():
 def searching():
     selection = request.form.get("selection")
     search = request.form.get("search")
-    # print(request.form)
-    # if Blog.query.filter_by()
-    # print(search)
+    print(selection)
+    print(search)
+    if selection == "Users":
+        result = Blog.query.filter_by(Author=search).all()
+    elif selection == "Rating":
+        result = Blog.query.filter_by(ratings_count=search).all()
+    elif selection == "Title":
+        result = Blog.query.filter_by(title=search).all()
+    elif selection == "Date":
+        result = Blog.query.filter_by(date=search).all()
+    # else:
+        #rendertemplate with alert
+    print(result)
     return render_template('AboutUs.html')
 # @app.route("/users/<int:id>")
 # def user(id):

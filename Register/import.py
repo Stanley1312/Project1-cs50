@@ -15,7 +15,7 @@ def main():
     for i in range(0,len(dataframe.values)):
         row = dataframe.iloc[[i]].values[0]
         # print(row)
-        new_blog = Blog(title=row[0],users_id=row[1],ratings_count=row[2],date=row[3])
+        new_blog = Blog(title=row[0],ratings_count=row[1],Author=row[2],date=row[3])
         db.session.add(new_blog)
         db.session.commit()
     db.create_all()
