@@ -31,7 +31,7 @@
                 left: 63%;
             }
         </style>
-    </head>
+        
     <body>
         <div id="topnav">
             <a class="homebut" href="home.html">Home</a>
@@ -63,10 +63,15 @@
             <div class="login"> 
             </div>
         </div>
-        <!-- <p> My Name is Tran Hoang Dang Khoa, 
-        <br>I was born in Da nang city, I'm 22 years
-        <br>old
-        </p> -->
+        <div class="aleart">
+            <script>
+                function showAlert() { alert('không có dữ liệu !!'); }
+            </script>
+            {% if message == False %}
+                <script>showAlert();</script>
+            {% endif %}
+        </div>
+        
     </body>
     
 </html>

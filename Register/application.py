@@ -19,7 +19,7 @@ def main():
 def home():
     return render_template("login.html")
 
-@app.route("/register", methods=["POST"])
+@app.route("/login", methods=["POST"])
 def register():
     """Register."""
     # Get form information.
@@ -34,7 +34,7 @@ def register():
         return render_template("success.html")
     else:
         return render_template("error.html", message="The name has already existed.")
-@app.route("/login", methods=["POST"])
+@app.route("/home", methods=["POST"])
 def login():
     """Login."""
     # Get form information.
@@ -43,49 +43,48 @@ def login():
 
     # Add user
     if User.query.filter_by(name=name,password=password).first() is None:
-        # new_user = User(name=name,password=password)
-        # db.session.add(new_user)
-        # db.session.commit()
         return render_template("register.html")
     else:
         full_filename = os.path.join(app.config['UPLOAD_FOLDER'],'first.jpg')
         return render_template("home.html",user_image=full_filename)
-@app.route("/register")
+
+@app.route("/login")
 def turn_back_toregister():
     return render_template("register.html")
-@app.route("/login")
+
+@app.route("/home")
 def logout():
     return render_template("login.html")
-@app.route('/home',methods=["POST"])
+
+@app.route('/home2',methods=["POST"])
 def searching():
     selection = request.form.get("selection")
     search = request.form.get("search")
-    print(selection)
-    print(search)
+    # print(selection)
+    # print(search)
+    message = True
     if selection == "Users":
-        result = Blog.query.filter_by(Author=search).first()
+        results = Blog.query.filter_by(Author=search).all()
     elif selection == "Rating":
-        result = Blog.query.filter_by(ratings_count=search).all()
+        results = Blog.query.filter_by(ratings_count=search).all()
     elif selection == "Title":
-        result = Blog.query.filter_by(title=search).all()
+        results = Blog.query.filter_by(title=search).all()
     elif selection == "Date":
-        result = Blog.query.filter_by(date=search).all()
-    # else:
-        #rendertemplate with alert
-    print(result)
-    return render_template('AboutUs.html')
-# @app.route("/users/<int:id>")
-# def user(id):
-#     """List all blog of an user."""
+        results = Blog.query.filter_by(date=search).all()
 
-#     # Make sure user exists.
-#     user = User.query.get(id)
-#     if user is None:
-#         return render_template("error.html", message="No such user.")
+    if results == []:
+        message = False
 
-#     # Get all blog.
-#     blog = user.blog
-#     return render_template("success.html")
+    # print(message)
+    print(results[0].title)
+
+    # full_filename = os.path.join(app.config['UPLOAD_FOLDER'],'click.jpg')
+    # print(full_filename)
+    return render_template("resultSearching.html",results=results)
+
+@app.route("/blog")
+def blogRender():
+    return render_template("blog.html")
 
 if __name__ == "__main__":
     with app.app_context():
