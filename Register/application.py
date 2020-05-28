@@ -63,7 +63,7 @@ def searching():
     print(selection)
     print(search)
     if selection == "Users":
-        result = Blog.query.filter_by(Author=search).all()
+        result = Blog.query.filter_by(Author=search).first()
     elif selection == "Rating":
         result = Blog.query.filter_by(ratings_count=search).all()
     elif selection == "Title":
