@@ -21,13 +21,15 @@ class User(db.Model):
 
 class Blog(db.Model):
     __tablename__ = "Blogs"
-    # __table_args__ = (db.UniqueConstraint('users'),)
+    __table_args__ = (db.UniqueConstraint('title'),)
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String, nullable=False)
+    title = db.Column(db.String, nullable=False,unique=True)
+    content = db.Column(db.String, nullable=False)
     ratings_count = db.Column(db.Integer, nullable=True)
     date = db.Column(db.String,nullable=False)
     Author = db.Column(db.String,db.ForeignKey("Users.name"),nullable=False)
     comments = db.relationship("Comment", backref="Blogs", lazy=True)
+
 
 class Comment(db.Model):
     __tablename__ = "Comments"

@@ -49,7 +49,6 @@ def login():
         return render_template("register.html")
     else:
         full_filename = os.path.join(app.config['UPLOAD_FOLDER'],'first.jpg')
-<<<<<<< HEAD
         return render_template("home.html",user_image=full_filename,name=name )
 @app.route("/register")
 def turn_back_toregister():
@@ -74,22 +73,46 @@ def searching():
     elif selection == "Title":
         results = Blog.query.filter_by(title=search).all()
     elif selection == "Date":
-        results = Blog.query.filter_by(date=search).all()
-
+        results = Blog.query.filter_by(date=search).all() 
     if results == []:
         message = False
-
     # print(message)
     print(results[0].Author)
-
     # full_filename = os.path.join(app.config['UPLOAD_FOLDER'],'click.jpg')
     # print(full_filename)
     return render_template("resultSearching.html",results=results)
 
-@app.route("/blog")
+@app.route("/blog",methods=["POST"])
 def blogRender():
-    return render_template("blog.html")
->>>>>>> 892e1c0077f42676d1c8c05ea60c5c6e599cdb2a
+    # title = request.form.get("title")
+    # content = request.form.get("content")
+    id = request.form.get("id")
+    blog = Blog.query.filter_by(id=id).all()
+    author = blog[0].Author
+    title = blog[0].title
+    content = blog[0].content
+    comments=Comment.query.filter_by(blog=title).all()
+    message = True
+    if len(comments) == 0:
+        message = False
+    return render_template("blog.html",title=title,content=content,author=author,comments=comments,message=message)
+@app.route('/blog',methods=["POST"])
+def comment():
+    user_name = session['username']
+    content = request.form.get("content")
+    if selection == "Users":
+        results = Blog.query.filter_by(Author=search).all()
+    elif selection == "Rating":
+        results = Blog.query.filter_by(ratings_count=search).all()
+    elif selection == "Title":
+        results = Blog.query.filter_by(title=search).all()
+    elif selection == "Date":
+        results = Blog.query.filter_by(date=search).all()
+    if results == []:
+        message = False
+    # full_filename = os.path.join(app.config['UPLOAD_FOLDER'],'click.jpg')
+    # print(full_filename)
+    return render_template("resultSearching.html",results=results)
 
 if __name__ == "__main__":
     with app.app_context():

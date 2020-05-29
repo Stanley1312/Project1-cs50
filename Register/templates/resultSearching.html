@@ -3,12 +3,35 @@
 {% block title %}
     Result searching
 {% endblock %}
+{% block style %}
+button {
+    background: none!important;
+    border: none;
+    padding: 0!important;
+    /*optional*/
+    font-family: arial, sans-serif;
+    /*input has OS specific font-family*/
+    color: #069;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+{% endblock %}
 
 {% block body %}
     <h1>Result searching</h1>
         <ul>
+            <form method="POST" action="{{url_for('blogRender')}}"> 
                 {% for result in results %}
-                    <a href="{{url_for('blogRender')}}">Title:{{ result.title }} / Author:{{ result.Author }}</a>
+                <input type="hidden" name="id" value={{result.id}}>
+<!-- 
+                <input type="hidden" name="title" value={{result.title}}>
+                <input type="hidden" name="content" value={{result.content}}>
+                <input type="hidden" name="ratings_count" value={{result.ratings_count}}>
+                <input type="hidden" name="date" value={{result.date}}>
+                <input type="hidden" name="author" value={{result.Author}}>
+                <input type="hidden" name="comments" value={{result.comments}}> -->
+                <button >Title:{{ result.title }} / Author:{{ result.Author }}</button>
                 {% endfor %}
+            </form>
         </ul>
 {% endblock %}
