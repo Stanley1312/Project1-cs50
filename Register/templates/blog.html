@@ -7,20 +7,23 @@
     <h2>-----------------{{author}}-------------------</h2>
     <h2>{{content}}</h2>
     <h2>-----------------Comment-----------------</h2>
-    {% endblock %}
-    <!-- <ul>
+    <ul>
         {% if message %}
         {% for comment in comments %}
             <li>{{ comment.user}} ( {{ comment.date}} ) :{{ comment.content }}</li>
         {% endfor %}  
         {% endif %}  
-    </ul> -->
-    <!-- <h3>Write your comment</h3>
+    </ul>
+    <h3>Write your comment</h3>
     <form action="{{ url_for('comment') }}" method="post">
         <div class="form-group">
             <input class="form-control" name="content" placeholder="Your review" >
         </div>
+        <input type="hidden" value={{title}} name="title">
         <div class="form-group">
             <button class="btn btn-primary">Submit</button>
         </div>
-    </form> -->
+        
+    </form>
+    <h2>User : {{username}} </h2>
+{% endblock %}

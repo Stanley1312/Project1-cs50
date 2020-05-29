@@ -35,7 +35,7 @@ class Comment(db.Model):
     __tablename__ = "Comments"
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.String, nullable=False)
-    date = db.Column(db.String,nullable=False)
+    date = db.Column(db.String,nullable=True)
     user = db.Column(db.String,db.ForeignKey("Users.name"),nullable=False)
     blog = db.Column(db.String,db.ForeignKey("Blogs.title"),nullable=False)
     

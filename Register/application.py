@@ -100,19 +100,14 @@ def blogRender():
 def comment():
     user_name = session['username']
     content = request.form.get("content")
-    if selection == "Users":
-        results = Blog.query.filter_by(Author=search).all()
-    elif selection == "Rating":
-        results = Blog.query.filter_by(ratings_count=search).all()
-    elif selection == "Title":
-        results = Blog.query.filter_by(title=search).all()
-    elif selection == "Date":
-        results = Blog.query.filter_by(date=search).all()
-    if results == []:
-        message = False
+    title = request.form.get("title")
+    new_comment = Comment(blog=title,content=content,user=user_name)
+    db.session.add(new_comment)
+    db.session.commit()
+
     # full_filename = os.path.join(app.config['UPLOAD_FOLDER'],'click.jpg')
     # print(full_filename)
-    return render_template("resultSearching.html",results=results)
+    return render_template("blog.html",result,username=user_name)
 
 if __name__ == "__main__":
     with app.app_context():
