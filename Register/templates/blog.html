@@ -6,7 +6,7 @@
     <h1>{{title}}</h1>
     <h2>-----------------{{author}}-------------------</h2>
     <h2>{{content}}</h2>
-    <h2>-----------------Comment-----------------</h2>
+    <h2>-----------------Comment : {{comments|length}}-----------------</h2>
     <ul>
         {% if message %}
         {% for comment in comments %}

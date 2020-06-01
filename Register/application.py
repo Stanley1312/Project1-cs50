@@ -118,6 +118,29 @@ def blogRender():
             db.session.commit()
             return render_template("blog.html",title=title,content=contents,author=author,comments=comments,message=message,alert=False)
 
+@app.route("/blog/<int:id>",methods=["GET"])
+def blog_api(id):
+    """Return details about a single flight."""
+
+    # Make sure blog exists.
+    blog = Blog.query.get(id)
+    print("khoa oc choooooooooooooooooooooooooooooooooooo")
+    print(blog)
+    print(type(blog))
+    if blog is None:
+        return jsonify({"error": "Invalid blog"}), 404
+
+    # Get all passengers.
+    comments = blog.comments
+    names = []
+    for comment in comments:
+        names.append(comment.content)
+    return jsonify({  
+            "Author": blog.Author,
+            "Title": blog.title,
+            "Comment"": names
+        })
+
 if __name__ == "__main__":
     with app.app_context():
         main()
