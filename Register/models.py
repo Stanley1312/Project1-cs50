@@ -29,13 +29,17 @@ class Blog(db.Model):
     date = db.Column(db.String,nullable=False)
     Author = db.Column(db.String,db.ForeignKey("Users.name"),nullable=False)
     comments = db.relationship("Comment", backref="Blogs", lazy=True)
+    def add_comment(self,content):
+        c = Comment(content)
+        db.session.add(c)
+        db.session.commit()
 
 
 class Comment(db.Model):
     __tablename__ = "Comments"
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.String, nullable=False)
-    date = db.Column(db.String,nullable=True)
+    date = db.Column(db.String, nullable=True)
     user = db.Column(db.String,db.ForeignKey("Users.name"),nullable=False)
     blog = db.Column(db.String,db.ForeignKey("Blogs.title"),nullable=False)
     
