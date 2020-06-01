@@ -87,9 +87,6 @@ def blogRender():
     # title = request.form.get("title")
     # content = request.form.get("content")
     id = request.form.get("id")
-    print("dsjdasdsafsdkb")
-    print("id:")
-    print(id)
     if id:
         blog = Blog.query.filter_by(id=id).all()
         print(type(blog[0]))
@@ -100,22 +97,26 @@ def blogRender():
         message = True
         if len(comments) == 0:
             message = False
-        return render_template("blog.html",title=title,content=content,author=author,comments=comments,message=message)
+        return render_template("blog.html",title=title,content=content,author=author,comments=comments,message=message,alert=False)
     if id == None:
         user_name = session['username']
-        print("bla badsaihddsifbdugfuefnbeuifdsjfniu4564165198654")
-        print(user_name)
         content_comment = request.form.get("content")
         title = request.form.get("title")
         author = request.form.get("author")
         blog = Blog.query.filter_by(title=title).all()[0]
         contents = blog.content
-        new_comment = Comment(blog=title,content=content_comment,user=user_name)
-        db.session.add(new_comment)
-        db.session.commit()
+
         comments=Comment.query.filter_by(blog=title).all()
         message = True
-        return render_template("blog.html",title=title,content=contents,author=author,comments=comments,message=message)
+
+        check_comment = Comment.query.filter_by(user=user_name).all()
+        if len(check_comment)>0:
+            return render_template("blog.html",title=title,content=contents,author=author,comments=comments,message=message,alert=True)
+        else:
+            new_comment = Comment(blog=title,content=content_comment,user=user_name)
+            db.session.add(new_comment)
+            db.session.commit()
+            return render_template("blog.html",title=title,content=contents,author=author,comments=comments,message=message,alert=False)
 
 if __name__ == "__main__":
     with app.app_context():
