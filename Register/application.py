@@ -43,8 +43,11 @@ def login():
     password = request.form.get("password")
 
     session['username'] = name
-
-    # Add user
+    # if 'username' in session:
+    #     user = session['username']
+    #     print(user)
+    # print("adfadfkasndfoasdnfasdf")
+    # # Add user
     if User.query.filter_by(name=name,password=password).first() is None:
         return render_template("register.html")
     else:
@@ -76,8 +79,9 @@ def searching():
         results = Blog.query.filter_by(date=search).all() 
     if results == []:
         message = False
-    # print(message)
-    print(results[0].Author)
+        full_filename = os.path.join(app.config['UPLOAD_FOLDER'],'first.jpg')
+        return render_template("home.html",user_image=full_filename,message=message)
+    # print(results[0].Author)
     # full_filename = os.path.join(app.config['UPLOAD_FOLDER'],'click.jpg')
     # print(full_filename)
     return render_template("resultSearching.html",results=results)
@@ -86,7 +90,12 @@ def searching():
 def blogRender():
     # title = request.form.get("title")
     # content = request.form.get("content")
+    user_name = session['username'
+    content = request.form.get("content")
+    title = request.form.get("title")]
+    if content and title is not None:
     id = request.form.get("id")
+    if id is not None:
     blog = Blog.query.filter_by(id=id).all()
     author = blog[0].Author
     title = blog[0].title
@@ -104,7 +113,8 @@ def comment():
     new_comment = Comment(blog=title,content=content,user=user_name)
     db.session.add(new_comment)
     db.session.commit()
-
+    print("OAISDFKLSJDFOPASJOPF")
+    print(user_name)
     # full_filename = os.path.join(app.config['UPLOAD_FOLDER'],'click.jpg')
     # print(full_filename)
     return render_template("blog.html",result,username=user_name)
