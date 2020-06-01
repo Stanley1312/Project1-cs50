@@ -15,15 +15,17 @@
         {% endif %}  
     </ul>
     <h3>Write your comment</h3>
-    <form action="{{ url_for('comment') }}" method="post">
+    <form action="{{ url_for('blogRender') }}" method="post">
         <div class="form-group">
             <input class="form-control" name="content" placeholder="Your review" >
         </div>
         <input type="hidden" value={{title}} name="title">
+        <input type="hidden" value={{content}} name="content">
+        <input type="hidden" value={{author}} name="author">
         <div class="form-group">
             <button class="btn btn-primary">Submit</button>
         </div>
-        
+        <h2>User : {{username}} </h2>
     </form>
-    <h2>User : {{username}} </h2>
+    
 {% endblock %}

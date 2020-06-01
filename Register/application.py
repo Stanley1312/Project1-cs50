@@ -87,27 +87,35 @@ def blogRender():
     # title = request.form.get("title")
     # content = request.form.get("content")
     id = request.form.get("id")
-    blog = Blog.query.filter_by(id=id).all()
-    author = blog[0].Author
-    title = blog[0].title
-    content = blog[0].content
-    comments=Comment.query.filter_by(blog=title).all()
-    message = True
-    if len(comments) == 0:
-        message = False
-    return render_template("blog.html",title=title,content=content,author=author,comments=comments,message=message)
-@app.route('/blog',methods=["POST"])
-def comment():
-    user_name = session['username']
-    content = request.form.get("content")
-    title = request.form.get("title")
-    new_comment = Comment(blog=title,content=content,user=user_name)
-    db.session.add(new_comment)
-    db.session.commit()
-
-    # full_filename = os.path.join(app.config['UPLOAD_FOLDER'],'click.jpg')
-    # print(full_filename)
-    return render_template("blog.html",result,username=user_name)
+    print("dsjdasdsafsdkb")
+    print("id:")
+    print(id)
+    if id:
+        blog = Blog.query.filter_by(id=id).all()
+        print(type(blog[0]))
+        author = blog[0].Author
+        title = blog[0].title
+        content = blog[0].content
+        comments=Comment.query.filter_by(blog=title).all()
+        message = True
+        if len(comments) == 0:
+            message = False
+        return render_template("blog.html",title=title,content=content,author=author,comments=comments,message=message)
+    if id == None:
+        user_name = session['username']
+        print("bla badsaihddsifbdugfuefnbeuifdsjfniu4564165198654")
+        print(user_name)
+        content_comment = request.form.get("content")
+        title = request.form.get("title")
+        author = request.form.get("author")
+        blog = Blog.query.filter_by(title=title).all()[0]
+        contents = blog.content
+        new_comment = Comment(blog=title,content=content_comment,user=user_name)
+        db.session.add(new_comment)
+        db.session.commit()
+        comments=Comment.query.filter_by(blog=title).all()
+        message = True
+        return render_template("blog.html",title=title,content=contents,author=author,comments=comments,message=message)
 
 if __name__ == "__main__":
     with app.app_context():
