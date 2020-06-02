@@ -3,6 +3,7 @@
     Personal Blog
 {% endblock %}
 {% block body %}
+
     <h1>{{title}}</h1>
     <h2>-----------------{{author}}-------------------</h2>
     <h2>{{content}}</h2>
@@ -15,7 +16,7 @@
         {% endif %}  
     </ul>
     <h3>Write your comment</h3>
-    <form action="{{ url_for('blogRender') }}" method="post">
+    <form action="{{ url_for('blogRender',title=title,alert=True) }}" method="post">
         <div class="form-group">
             <input class="form-control" name="content" placeholder="Your review" >
         </div>
@@ -25,14 +26,18 @@
         <div class="form-group">
             <button class="btn btn-primary">Submit</button>
         </div>
+
+        {% if get_flashed_messages()%}
         <div class="aleart">
             <script>
                 function showAlert() { alert('Bạn đã đánh giá rồi!!'); }
             </script>
-            {% if alert == True %}
-                <script>showAlert();</script>
-            {% endif %}
+                {% for message in get_flashed_messages() %}
+                    <div class="alert-error">Error: {{ message }}</div>
+                {% endfor %}
+             <script>showAlert();</script>
         </div>
+        {% endif %}
     </form>
     
 {% endblock %}

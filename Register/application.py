@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify, request,session
+from flask import Flask, render_template, jsonify, request,session,redirect,url_for,flash
 from models import *
 import os
 
@@ -82,41 +82,46 @@ def searching():
     # print(full_filename)
     return render_template("resultSearching.html",results=results)
 
-@app.route("/blog",methods=["POST"])
-def blogRender():
-    # title = request.form.get("title")
-    # content = request.form.get("content")
-    id = request.form.get("id")
-    if id:
-        blog = Blog.query.filter_by(id=id).all()
-        print(type(blog[0]))
-        author = blog[0].Author
-        title = blog[0].title
-        content = blog[0].content
-        comments=Comment.query.filter_by(blog=title).all()
-        message = True
-        if len(comments) == 0:
-            message = False
-        return render_template("blog.html",title=title,content=content,author=author,comments=comments,message=message,alert=False)
-    if id == None:
+@app.route("/blog/<string:title>",methods=["POST","GET"])
+def blogRender(title):
+    print(request.method)
+    if request.method=="POST":
+        print(999999999999999999999999999999)
         user_name = session['username']
         content_comment = request.form.get("content")
-        title = request.form.get("title")
+        title1 = request.form.get("title")
         author = request.form.get("author")
-        blog = Blog.query.filter_by(title=title).all()[0]
-        contents = blog.content
-
-        comments=Comment.query.filter_by(blog=title).all()
+        blog = Blog.query.filter_by(title=title1).all()
+        contents = blog[0].content
+        comments=Comment.query.filter_by(blog=title1).all()
         message = True
-
-        check_comment = Comment.query.filter_by(user=user_name).all()
-        if len(check_comment)>0:
-            return render_template("blog.html",title=title,content=contents,author=author,comments=comments,message=message,alert=True)
+        check_comment = Comment.query.filter_by(user=user_name,blog=title).all()
+        if len(check_comment) > 0:
+            print(77777777777777777777777)
+            flash("incorrect username or password.")
+            # return render_template("blog.html",title=title,content=contents,author=author,comments=comments,message=message,alert=True)
         else:
+            print(88888888)
             new_comment = Comment(blog=title,content=content_comment,user=user_name)
             db.session.add(new_comment)
             db.session.commit()
-            return render_template("blog.html",title=title,content=contents,author=author,comments=comments,message=message,alert=False)
+            # return render_template("blog.html",title=title,content=contents,author=author,comments=comments,message=message,alert=False)
+        return redirect(url_for('blogRender',title=title))
+    else:
+        blog = Blog.query.filter_by(title=title).all()
+        print(222222222222222222222222222222)
+        author = blog[0].Author
+        title1 = blog[0].title
+        content = blog[0].content
+        comments=Comment.query.filter_by(blog=title1).all()
+        print(author)
+        print(title1)
+        print(content)
+        message = True
+        if len(comments) == 0:
+            message = False
+        return render_template("blog.html",title=title1,content=content,author=author,comments=comments,message=message,alert=False)
+
 
 @app.route("/blog/<int:id>",methods=["GET"])
 def blog_api(id):
@@ -138,7 +143,7 @@ def blog_api(id):
     return jsonify({  
             "Author": blog.Author,
             "Title": blog.title,
-            "Comment"": names
+            "Comment": names
         })
 
 if __name__ == "__main__":
