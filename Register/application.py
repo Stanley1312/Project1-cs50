@@ -5,8 +5,8 @@ import os
 PEOPLE_FOLDER = os.path.join('static', 'img')
 
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = r"postgres://qgorardefomjqz:ebcb07859a907fe7ab36b6738c6e8f4d475e6a5457a4d9c8be656c9350b45e29@ec2-54-161-208-31.compute-1.amazonaws.com:5432/d2metr5n3omthh"
-# app.config["SQLALCHEMY_DATABASE_URI"] = r"postgresql://postgres:1@localhost:5432/project1"
+# app.config["SQLALCHEMY_DATABASE_URI"] = r"postgres://qgorardefomjqz:ebcb07859a907fe7ab36b6738c6e8f4d475e6a5457a4d9c8be656c9350b45e29@ec2-54-161-208-31.compute-1.amazonaws.com:5432/d2metr5n3omthh"
+app.config["SQLALCHEMY_DATABASE_URI"] = r"postgresql://postgres:1@localhost:5432/project1"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config['UPLOAD_FOLDER'] = PEOPLE_FOLDER
 app.secret_key = "abc"  
@@ -81,84 +81,80 @@ def searching():
         message = False
         full_filename = os.path.join(app.config['UPLOAD_FOLDER'],'first.jpg')
         return render_template("home.html",user_image=full_filename,message=message)
-    # print(results[0].Author)
-    # full_filename = os.path.join(app.config['UPLOAD_FOLDER'],'click.jpg')
-    # print(full_filename)
+    
     return render_template("resultSearching.html",results=results)
 
-@app.route("/blog/",methods=["POST","GET"])
-def blogRender():
+@app.route("/blog/<string:title>",methods=["POST","GET"])
+def blogRender(title):
     user_name = session['username']
-    
-    # content = request.form.get("content")
-    # title = request.form.get("title")
-    # if content and title is not None:
-    id = request.form.get("id")
-    # print("dsjdasdsafsdkb")
-    # print("id:")
-    # print(id)
-    if id:
-        blog = Blog.query.filter_by(id=id).all()
-        print(type(blog[0]))
+    # title = request.args.get("title")
+    if request.method == "GET":
+        blog = Blog.query.filter_by(title=title).all()
         author = blog[0].Author
         title = blog[0].title
         content = blog[0].content
         comments=Comment.query.filter_by(blog=title).all()
-        
         message = True
-        print("ajsdfasdfjasd")
-        print(author)
-        print(title)
-        print(comments)
-        print(content)
         if len(comments) == 0:
             message = False
-        # return redirect(url_for('blog_id',id=id,title=title))
-        return render_template("blog.html",title=title,content=content,author=author,comments=comments,message=message,username=user_name)
-
-    if id == None:
-        user_name = session['username']
-        print("bla badsaihddsifbdugfuefnbeuifdsjfniu4564165198654")
-        print(user_name)
+        alert = False
+    if request.method == "POST":
+        # print("vo duoc roi ne leu leu")
+        content_comment = request.form.get("content")
         content_comment = request.form.get("content_comment")
         drone = request.form.get("drone")
         drone = int(drone)
-        
         list_drone.append(drone)
         drone = sum(list_drone)/ len(list_drone)
-        title = request.form.get("title")
-        # if drone and title is not None:
-        #     count += 1 
-        print(title)
+        # print("--------------title---------------")
+        # print(title)
         author = request.form.get("author")
         blog = Blog.query.filter_by(title=title).all()[0]
-        contents = blog.content
-        new_comment = Comment(blog=title,content=content_comment,user=user_name)
-        print(new_comment.date)
-        db.session.add(new_comment)
-        db.session.commit()
-        print("asdfasdfasdasdfdasf")
+        print("--------------blog---------------")
+        print(blog)
+        content = blog.content
+        print("--------------content---------------")
+        print(content)
         comments=Comment.query.filter_by(blog=title).all()
+        print("--------------comment---------------")
+        print(comments)
         count = len(comments)
         message = True
-        # return redirect(url_for('blog_id',id=id))
-        return render_template("blog.html",title=title,content=contents,author=author,comments=comments,message=message,username=user_name,count=count,drone=drone)
+        check_comment = Comment.query.filter_by(user=user_name).all()
+        print("--------------check-content---------------")
+        print(check_comment)
+        if len(check_comment)>0:
+            alert = True
+            # return redirect(url_for('blogRender',title=title))
+        else:
+            new_comment = Comment(blog=title,content=content_comment,user=user_name)
+            db.session.add(new_comment)
+            db.session.commit()
+            alert = False
+        print(alert)   # return redirect(url_for('blogRender',title=title))
+    return render_template("blog.html",title=title,content=content,author=author,comments=comments,message=message,alert=alert)
+@app.route("/blog/<int:id>",methods=["GET"])
+def blog_api(id):
+    """Return details about a single flight."""
 
-# @app.route("/blog/<id>")
-# def blog_id(id):
-#     user_name = session['username']
-#     blog = Blog.query.filter_by(id=id).all()[0]
-#     # print(type(blog[0]))
-#     author = blog.Author
-#     title = blog.title
-#     content = blog.content
-#     comments=Comment.query.filter_by(blog=title).all()
-#     message = True
-#     if len(comments) == 0:
-#         message = False
-#     count = len(comments)
-#     return render_template("blog.html",title=title,content=content,author=author,comments=comments,message=message,username=user_name,count=count)
+    # Make sure blog exists.
+    blog = Blog.query.get(id)
+    print("khoa oc choooooooooooooooooooooooooooooooooooo")
+    print(blog)
+    print(type(blog))
+    if blog is None:
+        return jsonify({"error": "Invalid blog"}), 404
 
+    # Get all passengers.
+    comments = blog.comments
+    names = []
+    for comment in comments:
+        names.append(comment.content)
+    return jsonify({  
+            "Author": blog.Author,
+            "Title": blog.title,
+            "Comment": names
+        })
 
 
 if __name__ == "__main__":
