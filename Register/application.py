@@ -94,10 +94,13 @@ def blogRender(title):
         title = blog[0].title
         content = blog[0].content
         comments=Comment.query.filter_by(blog=title).all()
+        print("-----------getcomment------------")
+        print(comments)
         message = True
         if len(comments) == 0:
             message = False
         alert = False
+        drone = 0
     if request.method == "POST":
         # print("vo duoc roi ne leu leu")
         content_comment = request.form.get("content")
@@ -118,21 +121,21 @@ def blogRender(title):
         comments=Comment.query.filter_by(blog=title).all()
         print("--------------comment---------------")
         print(comments)
-        count = len(comments)
         message = True
         check_comment = Comment.query.filter_by(user=user_name).all()
         print("--------------check-content---------------")
         print(check_comment)
         if len(check_comment)>0:
             alert = True
-            # return redirect(url_for('blogRender',title=title))
         else:
+            print(88888888)
             new_comment = Comment(blog=title,content=content_comment,user=user_name)
             db.session.add(new_comment)
             db.session.commit()
             alert = False
+        comments = Comment.query.filter_by(user=user_name).all()
         print(alert)   # return redirect(url_for('blogRender',title=title))
-    return render_template("blog.html",title=title,content=content,author=author,comments=comments,message=message,alert=alert)
+    return render_template("blog.html",title=title,content=content,author=author,comments=comments,message=message,alert=alert,drone=drone)
 @app.route("/blog/<int:id>",methods=["GET"])
 def blog_api(id):
     """Return details about a single flight."""

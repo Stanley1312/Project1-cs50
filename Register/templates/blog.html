@@ -41,14 +41,13 @@
         <div class="form-group">
             <button class="btn btn-primary">Submit</button>
         </div>
-
         <div class="aleart">
             <script>
                 function showAlert() { alert('Bạn đã đánh giá rồi!!'); }
             </script>
-            {% if alert == True %}
-                <script>showAlert();</script>
-            {% endif %}
+                {% if alert %}
+                    <script>showAlert();</script>
+                {% endif %}   
         </div>
     </form>
 {% endblock %}
